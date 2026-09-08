@@ -80,7 +80,7 @@ I am continuing to expand this portfolio with additional QA skills, including:
 
 ## About Me
 I am pursuing entry-level opportunities in QA Analysis, Software Testing, Manual QA, and Junior QA Engineering. My professional background in technical customer support has strengthened my troubleshooting, documentation, issue investigation, and communication skills, which I now apply to software quality assurance.
-LinkedIn: Irmani Barnes
+**LinkedIn:** [Irmani Barnes](https://www.linkedin.com/in/irmani-barnes-057728356)
 
 
 ## Portfolio note: 
