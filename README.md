@@ -1,6 +1,7 @@
 # QA-Testing-Portfolio
 
 Hi, I'm Irmani Barnes. This repository is a hands-on Quality Assurance portfolio demonstrating practical experience with manual software testing, defect documentation, and browser automation using Python and Selenium WebDriver.
+
 I built these projects to practice the QA workflow from test design and execution through defect reporting and automated validation.
 
 ## Portfolio at a Glance
@@ -12,17 +13,19 @@ I built these projects to practice the QA workflow from test design and executio
 - Coverage includes functional testing, exploratory testing, boundary-value analysis, responsive/mobile testing, navigation, input validation, link integrity, and e-commerce workflows
 
 ## Manual Software Testing
-The manual testing workbook includes four sections:
-Test Cases — structured test cases with preconditions, steps, test data, expected results, and priority
-Execution Log — actual results, pass/fail status, notes, environment, and linked defects
-Bug Report Log — reproduction steps, expected vs. actual results, severity, technical evidence, and screenshots/evidence where available
-Test Summary — overall execution metrics and major findings
+
+- The manual testing workbook includes four sections:
+- Test Cases — structured test cases with preconditions, steps, test data, expected results, and priority
+- Execution Log — actual results, pass/fail status, notes, environment, and linked defects
+- Bug Report Log — reproduction steps, expected vs. actual results, severity, technical evidence, and screenshots/evidence where available
+- Test Summary — overall execution metrics and major findings
 
 ## Selected Defects Identified
-Broken secondary appointment-scheduling CTA
-Newsletter form accepting an invalid email format
-Missing character-length validation on a personalization field
-Broken product image/resource during an e-commerce search flow
+
+- Broken secondary appointment-scheduling CTA
+- Newsletter form accepting an invalid email format
+- Missing character-length validation on a personalization field
+- Broken product image/resource during an e-commerce search flow
 
 
 ## Selenium WebDriver Automation
