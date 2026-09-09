@@ -12,7 +12,7 @@ I built these projects to practice the QA workflow from test design and executio
 - 6 Selenium WebDriver automation scripts
 - Coverage includes functional testing, exploratory testing, boundary-value analysis, responsive/mobile testing, navigation, input validation, link integrity, and e-commerce workflows
 
-## Manual Software Testing
+## [Manual Software Testing](./manual-testing/)
 
 - The manual testing workbook includes four sections:
 - Test Cases — structured test cases with preconditions, steps, test data, expected results, and priority
@@ -28,7 +28,7 @@ I built these projects to practice the QA workflow from test design and executio
 - Broken product image/resource during an e-commerce search flow
 
 
-## Selenium WebDriver Automation
+## [Selenium WebDriver Automation](./selenium-automation/)
 
 | Script | What It Demonstrates |
 | --- | --- |
