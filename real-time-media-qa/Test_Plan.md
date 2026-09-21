@@ -69,6 +69,7 @@ The following areas are considered higher risk for this project:
 - Camera availability changes after initialization
 - Browser-specific behavior differs
 - Application behavior does not clearly communicate media failures to the user
+- Successful camera initialization may not result in a complete or consistent UI state update.
 
 ## 6. Entry Criteria
 
