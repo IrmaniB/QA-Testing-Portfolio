@@ -13,9 +13,10 @@
 | TC-002 | Deny camera permission and verify failure handling | Negative / Functional | High | Executed |
 | TC-003 | Retry camera initialization after permission denial | Negative / Exploratory | Medium | Partially Executed |
 | TC-004 | Rapidly click **Open Camera** before the initial media request resolves | Edge Case / Exploratory | Medium | Not Executed |
-| TC-005 | Attempt camera initialization when the camera is unavailable | Negative / Resiliency | High | Not Executed |
+| TC-005 | Repeated Permission Prompt Dismissal | Negative / Resiliency | High | Not Executed |
 | TC-006 | Remove camera availability after a successful stream has started | Resiliency / Exploratory | Medium | Not Executed |
 | TC-007 | Trigger an unsupported media-constraint condition | White-Box / Branch Coverage | Medium | Design Only |
+| TC-008 | Attempt camera initialization when the camera is unavailable | Negative / Resiliency | High | Not Executed |
 
 ## TC-001 - Successful Camera Initialization
 
@@ -122,3 +123,75 @@ Fail - Usability Defect Candidate
 
 **Notes:**  
 Repeated attempts while camera permission remains blocked append duplicate NotAllowedError and generic getUserMedia error messages rather than replacing or clearing the existing error state. This creates increasing visual clutter without giving the user additional information. The application also provides no guidance for recovering from a browser-blocked permission state; this is documented as a usability observation rather than a confirmed functional requirement.
+
+
+## TC-004 - Repeated Camera Initialization Before Permission Resolution
+
+**Objective:**  
+Determine whether a user can trigger multiple camera initialization requests before the initial `getUserMedia()` permission request is resolved.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- Camera permission has not already been allowed or denied for the site.
+- Browser permission prompt is available.
+
+**Test Steps:**
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Click **Open camera**.
+3. Before selecting an option in the browser permission prompt, attempt to interact with the **Open camera** button again.
+4. Observe whether additional camera initialization requests can be triggered.
+5. Observe the browser permission interface and application state.
+
+**Expected Result:**
+The application/browser should prevent multiple simultaneous camera initialization attempts while the initial permission request is unresolved. Only one active permission request should be presented to the user, and repeated initialization should not result in duplicate prompts, streams, or error states.
+
+**Actual Result:**
+Immediately after selecting Open camera, Chrome displayed its camera permission prompt. While the permission prompt was open, the underlying Open camera control could not be interacted with. As a result, additional camera initialization attempts could not be triggered through normal user interaction until the active permission request was resolved or dismissed.
+
+**Status:**
+Pass
+
+**Evidence:**
+[Add screenshot if applicable]
+
+**Notes:**
+In the tested Chrome environment, the prevention of repeated initialization requests appears to be enforced by the browser permission interface rather than by the application's button state. The application itself does not disable the Open camera button until getUserMedia() successfully resolves.
+
+
+
+## TC-005 - Repeated Permission Prompt Dismissal
+
+**Objective:**  
+Evaluate application behavior when the user repeatedly dismisses the browser camera-permission prompt without explicitly allowing or denying camera access.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- Camera permission has not already been permanently allowed or blocked.
+- Browser permission prompt is available.
+
+**Test Steps:**
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Click **Open camera**.
+3. When the browser permission prompt appears, close the prompt using the **X** without selecting an allow or deny option.
+4. Click **Open camera** again.
+5. Repeat the prompt-dismissal process multiple times.
+6. Observe whether the browser continues requesting permission.
+7. Observe any error messages displayed by the application.
+8. Click **Open camera** again after the application begins displaying an error.
+
+**Expected Result:**
+The browser re-prompts for permissions on initial dismissals. If the browser eventually treats repeated dismissals as a denial, the failure path triggers, and the application displays a clear error message indicating camera permission was not granted. Subsequent clicks after an error state are handled cleanly without stacking duplicate messages.
+
+**Actual Result:**
+Dismissing the browser prompt via the "X" button initially allowed re-prompting on subsequent clicks.  After repeated dismissals, the browser stopped prompting and returned NotAllowedError, which the application caught and displayed on-screen. Once the error state was reached, clicking "Open Camera" repeatedly resulted in stacked, duplicate error messages. The error message incorrectly referenced microphone permissions alongside camera permissions.
+
+**Status:**
+Pass with Existing Defects Reproduced
+
+**Evidence:**
+[Add screenshot if applicable]
+
+**Notes:**
+In the tested Chrome environment, repeated permission-prompt dismissals eventually resulted in NotAllowedError and the browser stopped presenting additional permission prompts. This behavior appears to be browser-controlled. Error message continues to state that microphone permissions were not granted, even though only camera access was requested. Repeatedly clicking "Open Camera" after the browser suppresses prompts continuously produces NotAllowedError blocks to the DOM via innerHTML +=.
