@@ -61,7 +61,7 @@ The permission-denied error message therefore does not accurately reflect the re
 
 ### Evidence
 
-- Screenshot: `[add screenshot filename here]`
+- Screenshot: `[screenshot filename]`
 - Related Test Case: TC-002
 
 
@@ -130,5 +130,5 @@ Repeated failures create increasing visual clutter and make the error state hard
 
 ### Evidence
 
-- Screenshot: `[add BUG-002 screenshot filename here]`
+- Screenshot: `[screenshot filename]`
 - Related Test Cases: TC-003, TC-005
