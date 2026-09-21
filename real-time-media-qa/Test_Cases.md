@@ -13,7 +13,7 @@
 | TC-002 | Deny camera permission and verify failure handling | Negative / Functional | High | Executed |
 | TC-003 | Retry camera initialization after permission denial | Negative / Exploratory | Medium | Partially Executed |
 | TC-004 | Rapidly click **Open Camera** before the initial media request resolves | Edge Case / Exploratory | Medium | Not Executed |
-| TC-005 | Repeated Permission Prompt Dismissal | Negative / Resiliency | High | Not Executed |
+| TC-005 | Repeated Permission Prompt Dismissal | Exploratory / Negative / Permission Handling | Medium | Executed - Pass with Existing Defects Reproduced |
 | TC-006 | Remove camera availability after a successful stream has started | Resiliency / Exploratory | Medium | Not Executed |
 | TC-007 | Trigger an unsupported media-constraint condition | White-Box / Branch Coverage | Medium | Design Only |
 | TC-008 | Attempt camera initialization when the camera is unavailable | Negative / Resiliency | High | Not Executed |
