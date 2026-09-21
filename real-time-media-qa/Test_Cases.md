@@ -85,3 +85,40 @@ Fail
 
 **Notes:**  
 The permission-denied message states that access to both the camera and microphone was not granted. However, the current media constraints specify audio: false and video: true, so microphone access is not requested. The message should reference camera permission only. Repeated attempts after denial also append additional error messages to the page rather than replacing the existing message or providing clearer recovery guidance.
+
+
+## TC-003 - Retry Camera Initialization After Permission Denial
+
+**Objective:**  
+Verify how the application behaves when the user attempts to initialize the camera again after previously denying camera permission.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- Camera permission has been denied for the site.
+- The previous permission-denied error is visible on the page.
+
+**Test Steps:**
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Click **Open camera**.
+3. Deny camera permission when prompted.
+4. Confirm that the permission-denied error appears.
+5. Click **Open camera** again without changing browser permission settings.
+6. Observe the video area.
+7. Observe the error-message area.
+8. Observe whether the application provides any recovery instructions or additional feedback.
+
+**Expected Result:**  
+The video area remains inactive because camera permission has not been granted. When Open Camera is selected again, the application should handle the repeated failure cleanly without unnecessarily duplicating previously displayed error content. Any recovery guidance provided should accurately reflect the blocked-permission state.
+
+**Actual Result:**  
+The video area remained inactive and no camera stream was displayed. Each additional click of Open Camera appended another identical set of permission-related error messages to the page, causing the error area to continuously grow. No recovery guidance was provided for restoring camera permission.
+
+**Status:**  
+Fail - Usability Defect Candidate
+
+**Evidence:**
+[Add screenshot if applicable]
+
+**Notes:**  
+Repeated attempts while camera permission remains blocked append duplicate NotAllowedError and generic getUserMedia error messages rather than replacing or clearing the existing error state. This creates increasing visual clutter without giving the user additional information. The application also provides no guidance for recovering from a browser-blocked permission state; this is documented as a usability observation rather than a confirmed functional requirement.
