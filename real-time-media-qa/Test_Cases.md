@@ -14,9 +14,12 @@
 | TC-003 | Retry camera initialization after permission denial | Negative / Exploratory | Medium | Partially Executed |
 | TC-004 | Rapidly click **Open Camera** before the initial media request resolves | Edge Case / Exploratory | Medium | Not Executed |
 | TC-005 | Repeated Permission Prompt Dismissal | Exploratory / Negative / Permission Handling | Medium | Executed - Pass with Existing Defects Reproduced |
-| TC-006 | Remove camera availability after a successful stream has started | Resiliency / Exploratory | Medium | Not Executed |
+| TC-006 | Remove camera availability after a successful stream has started | Resiliency / Exploratory / State Management | High | Not Executed |
 | TC-007 | Trigger an unsupported media-constraint condition | White-Box / Branch Coverage | Medium | Design Only |
 | TC-008 | Attempt camera initialization when the camera is unavailable | Negative / Resiliency | High | Not Executed |
+
+
+---
 
 ## TC-001 - Successful Camera Initialization
 
@@ -53,6 +56,8 @@ Pass
 Usability Observation: Although the Open camera button becomes disabled after successful camera initialization, its visual appearance does not clearly indicate a disabled state.
 
 
+---
+
 ## TC-002 - Camera Permission Denied
 
 **Objective:**  
@@ -87,6 +92,8 @@ Fail
 **Notes:**  
 The permission-denied message states that access to both the camera and microphone was not granted. However, the current media constraints specify audio: false and video: true, so microphone access is not requested. The message should reference camera permission only. Repeated attempts after denial also append additional error messages to the page rather than replacing the existing message or providing clearer recovery guidance.
 
+
+---
 
 ## TC-003 - Retry Camera Initialization After Permission Denial
 
@@ -125,6 +132,8 @@ Fail - Usability Defect Candidate
 Repeated attempts while camera permission remains blocked append duplicate NotAllowedError and generic getUserMedia error messages rather than replacing or clearing the existing error state. This creates increasing visual clutter without giving the user additional information. The application also provides no guidance for recovering from a browser-blocked permission state; this is documented as a usability observation rather than a confirmed functional requirement.
 
 
+---
+
 ## TC-004 - Repeated Camera Initialization Before Permission Resolution
 
 **Objective:**  
@@ -159,6 +168,7 @@ Pass
 In the tested Chrome environment, the prevention of repeated initialization requests appears to be enforced by the browser permission interface rather than by the application's button state. The application itself does not disable the Open camera button until getUserMedia() successfully resolves.
 
 
+---
 
 ## TC-005 - Repeated Permission Prompt Dismissal
 
@@ -197,7 +207,63 @@ Pass with Existing Defects Reproduced
 In the tested Chrome environment, repeated permission-prompt dismissals eventually resulted in NotAllowedError and the browser stopped presenting additional permission prompts. This behavior appears to be browser-controlled. Error message continues to state that microphone permissions were not granted, even though only camera access was requested. Repeatedly clicking "Open Camera" after the browser suppresses prompts continuously produces NotAllowedError blocks to the DOM via innerHTML +=.
 
 
-## TC-006 - Camera Unavailable at Initialization
+---
+
+## TC-006 - Camera Becomes Unavailable After Successful Initialization
+
+**Objective:**  
+Evaluate how the application responds when an active camera device becomes unavailable after the video stream has already initialized successfully.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- System camera is enabled and functioning.
+- Browser camera permission is allowed.
+- No previous error state is present on the page.
+
+**Test Steps:**
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Click **Open camera**.
+3. Allow camera access if prompted.
+4. Confirm that the live video stream initializes successfully.
+5. Confirm that the **Open camera** button becomes non-interactive.
+6. While the stream is active, open Windows **Device Manager**.
+7. Expand **Cameras**.
+8. Right-click the active camera and select **Disable device**.
+9. Return to the WebRTC demo.
+10. Observe the video area.
+11. Observe the page for any error messages, warnings, or state changes.
+12. Observe the **Open camera** button.
+13. Wait approximately 10–15 seconds and continue observing the page.
+14. Re-enable the camera in Device Manager.
+15. Return to the demo and observe whether the stream automatically recovers.
+16. If it does not recover, refresh the page and determine whether camera functionality can be restored.
+
+**Expected Result:**  
+If the active camera becomes unavailable during an initialized stream, the video should stop rendering and the application should clearly indicate that the media stream has been interrupted. The UI should transition out of the successful state and provide a usable recovery path, such as re-enabling the Open Camera control or otherwise allowing the camera to be reinitialized. After camera availability is restored, the stream should be recoverable through a clear retry or page reload without leaving the interface in an inconsistent state.
+
+**Actual Result:**  
+When the camera was disabled during an active stream, the live video immediately changed to a solid black display. No error message, warning, or status change appeared automatically. The Open Camera button remained non-interactive, preventing a retry through the application UI.
+After manually refreshing the page while the camera remained disabled, the application displayed getUserMedia error: NotReadableError. Repeatedly clicking Open Camera in this state appended duplicate NotReadableError messages to the page.
+After the camera was re-enabled in Device Manager, the active stream did not automatically recover. Multiple page reloads were required before camera initialization succeeded again. During part of the recovery process, Chrome displayed camera-use indicators while the application continued to report NotReadableError.
+
+**Status:**  
+Fail
+
+**Notes:**  
+Exact Error: getUserMedia error: NotReadableError
+Initial Mid-Stream Behavior: No application error path was triggered because the reviewed implementation only handles failures during the original getUserMedia() request and does not explicitly handle an already-active media track becoming unavailable.
+Post-Refresh Path: handleError() → Generic/Other error path (NotReadableError)
+BUG-002 Reproduced: Repeated retries during the NotReadableError state appended duplicate error messages to the existing error container.
+Recovery Observation: After restoring the camera device, browser/device state did not immediately return to normal. Camera-use indicators remained visible during part of the recovery process even while getUserMedia() continued returning NotReadableError. Because this behavior may involve Chrome or operating-system device state, it is documented as an environment/recovery observation rather than attributed solely to the application.
+
+
+
+
+
+---
+
+## TC-008 - Camera Unavailable at Initialization
 
 **Objective:**  
 Verify how the application handles camera initialization when no usable camera device is available.
