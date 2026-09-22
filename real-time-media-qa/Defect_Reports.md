@@ -61,8 +61,11 @@ The permission-denied error message therefore does not accurately reflect the re
 
 ### Evidence
 
-- Screenshot: `[screenshot filename]`
-- Related Test Case: TC-002
+- [Incorrect microphone reference](evidence/TC-002_permission-denied-error.png)
+
+### Related Test Case:
+
+- TC-002 - [Camera Permission Denied](./test_cases.md)
 
 
 ---
@@ -130,8 +133,12 @@ Repeated failures create increasing visual clutter and make the error state hard
 
 ### Evidence
 
-- Screenshot: `[screenshot filename]`
-- Related Test Cases: TC-003, TC-005
+- [Duplicate errors after permission denial](evidence/TC-003_duplicate-errors-after-denial.png)
+- [Duplicate NotReadableError messages during recovery](evidence/TC-006_notreadable-error-with-active-camera-indicators.png)
+
+### Related Test Case:
+
+- TC-003 - [Retry Camera Initialization After Permission Denial](./test_cases.md), TC-005 - [Repeated Permission Prompt Dismissal](./test_cases.md)
 
 
 ---
@@ -208,13 +215,13 @@ The lack of interruption feedback and retry controls can leave the user unable t
 
 ### Evidence
 
-- `TC-006_camera-disabled-black-stream.png`
-- `TC-006_notreadable-error-after-refresh.png`
-- `TC-006_notreadable-error-stacking-recovery-state.png`
+- [Black stream after camera interruption](evidence/TC-006_camera-disabled-black-stream.png)
+- [NotReadableError after page refresh](evidence/TC-006_notreadable-error-after-refresh.png)
+- [Recovery failure with active camera indicators](evidence/TC-006_notreadable-error-stacking-recovery-state.png)
 
-### Related Test Case
+### Related Test Case:
 
-- TC-006 - Camera Becomes Unavailable After Successful Initialization
+- TC-006 - [Camera Becomes Unavailable After Successful Initialization](./test_cases.md)
 
 
 ---
@@ -297,8 +304,8 @@ This may confuse users about whether the current camera session is functioning c
 
 ### Evidence
 
-- `TC-007_successful-recovery-with-stale-error.png`
+- [Successful camera stream with stale error still displayed](evidence/TC-007_successful-recovery-with-stale-error.png)
 
-### Related Test Case
+### Related Test Case:
 
-- TC-007 - Unsupported Media Constraint Condition
+- TC-007 - [Unsupported Media Constraint Condition](./test_cases.md)
