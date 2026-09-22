@@ -193,7 +193,7 @@ The following primary execution paths identified during source review have been 
 | Successful media initialization | TC-001 | Executed |
 | NotAllowedError | TC-002 | Executed |
 | Generic/other error (NotFoundError) | TC-005 | Executed |
-| OverconstrainedError | TC-007 | Not Yet Executed |
+| OverconstrainedError | TC-007 | Executed |
 
 ---
 
