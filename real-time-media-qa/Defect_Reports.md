@@ -65,7 +65,7 @@ The permission-denied error message therefore does not accurately reflect the re
 
 ### Related Test Case:
 
-- TC-002 - [Camera Permission Denied](./test_cases.md)
+- TC-002 - [Camera Permission Denied](./Test_Cases.md)
 
 
 ---
