@@ -215,3 +215,90 @@ The lack of interruption feedback and retry controls can leave the user unable t
 ### Related Test Case
 
 - TC-006 - Camera Becomes Unavailable After Successful Initialization
+
+
+---
+
+## BUG-004 - Stale Camera Error Remains Visible After Successful Recovery
+
+**Defect Type:** State Management / Error Handling  
+**Severity:** Low-Medium  
+**Suggested Priority:** Medium  
+**Status:** Open  
+**Reproducibility:** 100% in tested scenario
+
+### Description
+
+After a camera initialization attempt fails with `OverconstrainedError`, successfully restoring valid media constraints and initializing the camera does not clear the previous error messages from the page.
+
+As a result, the application displays a functioning live camera stream while simultaneously showing an error indicating that camera initialization failed.
+
+### Preconditions
+
+- WebRTC `getUserMedia()` demo is accessible.
+- Camera is enabled and functioning.
+- Browser camera permission is available.
+- Media constraints can be modified through Chrome DevTools.
+
+### Steps to Reproduce
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Set unsupported exact video constraints:
+
+   `width: 99999`
+   
+   `height: 99999`
+
+3. Click **Open camera**.
+4. Confirm that `OverconstrainedError` appears.
+5. Restore the video constraint to:
+
+   `window.constraints.video = true`
+
+6. Click **Open camera** again.
+7. Allow camera permission.
+8. Observe the active video stream.
+9. Observe the existing error-message area.
+
+### Expected Result
+
+After the camera initializes successfully, errors associated with the previous failed initialization attempt should be cleared or otherwise marked as no longer active.
+
+The UI should accurately reflect the application's current successful state.
+
+### Actual Result
+
+The camera successfully initializes and displays a live video stream.
+
+However, the previous:
+
+`OverconstrainedError`
+
+and
+
+`getUserMedia error: OverconstrainedError`
+
+messages remain visible below the active stream.
+
+### Technical Observation
+
+The reviewed `handleSuccess()` implementation initializes the media stream and disables the Open Camera button but does not clear the existing `#errorMsg` contents.
+
+Errors previously added through `errorMsg()` therefore remain in the DOM after successful recovery.
+
+### User Impact
+
+The interface presents contradictory information by displaying both:
+
+- a functioning live camera stream
+- an error indicating that camera initialization failed
+
+This may confuse users about whether the current camera session is functioning correctly.
+
+### Evidence
+
+- `TC-007_successful-recovery-with-stale-error.png`
+
+### Related Test Case
+
+- TC-007 - Unsupported Media Constraint Condition
