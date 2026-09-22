@@ -132,3 +132,86 @@ Repeated failures create increasing visual clutter and make the error state hard
 
 - Screenshot: `[screenshot filename]`
 - Related Test Cases: TC-003, TC-005
+
+
+---
+
+## BUG-003 - Camera Interruption Is Not Detected After Successful Stream Initialization
+
+**Defect Type:** Resiliency / State Management  
+**Severity:** Medium  
+**Suggested Priority:** Medium  
+**Status:** Open  
+**Reproducibility:** Reproduced in tested environment
+
+### Description
+
+When the active camera device becomes unavailable after a video stream has already initialized successfully, the application does not detect or communicate the interruption.
+
+The video display changes to a black screen, but no error message, warning, or status update appears. The **Open camera** button remains disabled, leaving the user without an in-application method to retry camera initialization.
+
+### Preconditions
+
+- WebRTC `getUserMedia()` demo is accessible.
+- Camera is enabled and functioning.
+- Camera permission is granted.
+- Live video stream has initialized successfully.
+
+### Steps to Reproduce
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Click **Open camera**.
+3. Allow camera access.
+4. Confirm that the live camera stream is displayed.
+5. While the stream is active, open Windows Device Manager.
+6. Disable the active camera device.
+7. Return to the WebRTC demo.
+8. Observe the video area.
+9. Observe the page for error messages or state changes.
+10. Attempt to click **Open camera**.
+
+### Expected Result
+
+When the active camera becomes unavailable, the application should detect the media interruption and clearly indicate that the stream has been lost.
+
+The UI should leave the successful state and provide a usable recovery path, such as re-enabling the **Open camera** control or allowing the user to retry initialization.
+
+### Actual Result
+
+The active video immediately changed to a solid black display.
+
+No error message, warning, or state notification appeared.
+
+The **Open camera** button remained disabled and non-interactive, preventing the user from attempting to reinitialize the camera without refreshing the page.
+
+### Technical Observation
+
+The reviewed implementation handles errors generated during the initial `getUserMedia()` request, but no explicit handling was identified for an already-active media track becoming unavailable after successful initialization.
+
+Because the original `getUserMedia()` call had already resolved successfully, disabling the camera did not route through `handleError()`.
+
+After refreshing the page while the camera remained unavailable, the browser returned:
+
+`getUserMedia error: NotReadableError`
+
+### User Impact
+
+A user may remain in an apparently successful application state even though the active video stream has been lost.
+
+The lack of interruption feedback and retry controls can leave the user unable to recover without manually refreshing the page.
+
+### Related Observations
+
+- BUG-002 was reproduced after refreshing into the `NotReadableError` state because repeated retries appended duplicate error messages.
+- After re-enabling the camera device, recovery required multiple page reloads in the tested environment.
+- Browser camera-use indicators remained active during part of the recovery process even while the application continued reporting `NotReadableError`. This behavior is documented as an environment/browser recovery observation rather than attributed solely to the application.
+
+### Evidence
+
+- `TC-006_camera-disabled-black-stream.png`
+- `TC-006_notreadable-error-after-refresh.png`
+- `TC-006_notreadable-error-stacking-recovery-state.png`
+
+### Related Test Case
+
+- TC-006 - Camera Becomes Unavailable After Successful Initialization
