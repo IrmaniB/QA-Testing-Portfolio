@@ -65,7 +65,7 @@ The permission-denied error message therefore does not accurately reflect the re
 
 ### Related Test Case:
 
-- TC-002 - [Camera Permission Denied]([./Test_Cases.md](https://github.com/IrmaniB/QA-Testing-Portfolio/blob/main/real-time-media-qa/Test_Cases.md#tc-002---camera-permission-denied))
+- TC-002 - [Camera Permission Denied](./Test_Cases.md)
 
 
 ---
