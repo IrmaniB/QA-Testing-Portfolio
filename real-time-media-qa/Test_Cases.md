@@ -55,7 +55,7 @@ Pass
 
 
 **Evidence:**
- [Successful Camera Initialization](evidence/TC-001_successful-camera-initialization.jpg)
+ [Successful Camera Initialization](./evidence/TC-001_successful-camera-initialization.jpg)
 
 
 **Notes:**
