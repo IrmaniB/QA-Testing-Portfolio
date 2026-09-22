@@ -65,7 +65,7 @@ The permission-denied error message therefore does not accurately reflect the re
 
 ### Related Test Case:
 
-- TC-002 - [Camera Permission Denied](./Test_Cases.md)
+- TC-002 - Camera Permission Denied
 
 
 ---
@@ -138,7 +138,7 @@ Repeated failures create increasing visual clutter and make the error state hard
 
 ### Related Test Case:
 
-- TC-003 - [Retry Camera Initialization After Permission Denial](./test_cases.md), TC-005 - [Repeated Permission Prompt Dismissal](./test_cases.md)
+- TC-003 - Retry Camera Initialization After Permission Denial, TC-005 - Repeated Permission Prompt Dismissal
 
 
 ---
@@ -221,7 +221,7 @@ The lack of interruption feedback and retry controls can leave the user unable t
 
 ### Related Test Case:
 
-- TC-006 - [Camera Becomes Unavailable After Successful Initialization](./test_cases.md)
+- TC-006 - Camera Becomes Unavailable After Successful Initialization
 
 
 ---
@@ -308,4 +308,4 @@ This may confuse users about whether the current camera session is functioning c
 
 ### Related Test Case:
 
-- TC-007 - [Unsupported Media Constraint Condition](./test_cases.md)
+- TC-007 - Unsupported Media Constraint Condition
