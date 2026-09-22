@@ -49,9 +49,6 @@ Upon selecting Allow, the camera stream initialized successfully and live video 
 **Status:**
 Pass
 
-**Evidence:**
-[Add screenshot if applicable]
-
 **Notes:**
 Usability Observation: Although the Open camera button becomes disabled after successful camera initialization, its visual appearance does not clearly indicate a disabled state.
 
@@ -161,9 +158,6 @@ Immediately after selecting Open camera, Chrome displayed its camera permission 
 **Status:**
 Pass
 
-**Evidence:**
-[Add screenshot if applicable]
-
 **Notes:**
 In the tested Chrome environment, the prevention of repeated initialization requests appears to be enforced by the browser permission interface rather than by the application's button state. The application itself does not disable the Open camera button until getUserMedia() successfully resolves.
 
@@ -200,8 +194,6 @@ Dismissing the browser prompt via the "X" button initially allowed re-prompting 
 **Status:**
 Pass with Existing Defects Reproduced
 
-**Evidence:**
-[Add screenshot if applicable]
 
 **Notes:**
 In the tested Chrome environment, repeated permission-prompt dismissals eventually resulted in NotAllowedError and the browser stopped presenting additional permission prompts. This behavior appears to be browser-controlled. Error message continues to state that microphone permissions were not granted, even though only camera access was requested. Repeatedly clicking "Open Camera" after the browser suppresses prompts continuously produces NotAllowedError blocks to the DOM via innerHTML +=.
@@ -250,15 +242,66 @@ After the camera was re-enabled in Device Manager, the active stream did not aut
 **Status:**  
 Fail
 
+**Evidence:**
+[Add screenshot if applicable]
+
 **Notes:**  
 Exact Error: getUserMedia error: NotReadableError
+
 Initial Mid-Stream Behavior: No application error path was triggered because the reviewed implementation only handles failures during the original getUserMedia() request and does not explicitly handle an already-active media track becoming unavailable.
+
 Post-Refresh Path: handleError() → Generic/Other error path (NotReadableError)
+
 BUG-002 Reproduced: Repeated retries during the NotReadableError state appended duplicate error messages to the existing error container.
+
 Recovery Observation: After restoring the camera device, browser/device state did not immediately return to normal. Camera-use indicators remained visible during part of the recovery process even while getUserMedia() continued returning NotReadableError. Because this behavior may involve Chrome or operating-system device state, it is documented as an environment/recovery observation rather than attributed solely to the application.
 
 
+---
 
+## TC-007 - Unsupported Media Constraint Condition
+
+**Objective:**  
+Verify that the application correctly handles an `OverconstrainedError` when the requested camera constraints cannot be satisfied by the available hardware.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- Camera is enabled and functioning.
+- Browser camera permission is available.
+- Chrome DevTools is accessible.
+- The application is using the default `window.constraints` object.
+
+**Test Steps:**
+
+1. Open the WebRTC `getUserMedia()` camera demo.
+2. Open Chrome DevTools.
+3. Select the **Console** tab.
+4. Modify the video constraints to request an unsupported exact resolution.
+5. Return to the application.
+6. Click **Open camera**.
+7. Observe the video area.
+8. Observe any error messages displayed.
+9. Observe the state of the **Open camera** button.
+10. Restore the original video constraint after testing.
+
+**Expected Result:**  
+No camera stream initializes, and the video area remains blank. The application catches the constraint failure and displays a specific, user-friendly error message stating that the requested video resolution or settings are not supported by the hardware. The "Open Camera" button remains usable so that the user can retry once valid constraints are set. Restoring valid media constraints allows the application to successfully request permissions and initialize the video stream without requiring a page reload.
+
+**Actual Result:**  
+The video area remained blank and no stream rendered when requesting `99999x99999` resolution. The page displayed a specific error message identifying the unsatisfied constraints: `OverconstrainedError: The constraints could not be satisfied by the available devices. Constraints: {"audio":false,"video":{"width":{"exact":99999},"height":{"exact":99999}}}` alongside `getUserMedia error: OverconstrainedError`. After valid constraints were restored, selecting Open Camera and allowing camera access successfully initialized the live video stream. However, the previous OverconstrainedError and generic getUserMedia error: OverconstrainedError messages remained visible beneath the active video stream and were not cleared after successful recovery.
+
+**Status:**  
+Fail - OverconstrainedError branch handled successfully, but stale error state remained after successful recovery.
+
+**Evidence:**
+[Add screenshot if applicable]
+
+**Notes:**  
+Exact Error Text: `OverconstrainedError: The constraints could not be satisfied by the available devices. Constraints: {"audio":false,"video":{"width":{"exact":99999},"height":{"exact":99999}}}`
+
+Flowchart Path Exercised: handleError() → OverconstrainedError specific branch → generic error output
+
+Recovery Defect: Successful camera initialization does not clear errors generated by previous failed attempts. This results in a contradictory UI state where the application simultaneously displays a functioning live stream and an error indicating that camera initialization failed.
 
 
 ---
@@ -299,8 +342,11 @@ Pass with Existing Defect Reproduced + Usability Observation
 
 **Notes:**  
 Exact Error: getUserMedia error: NotFoundError
+
 Execution Path: handleError() → fallback/generic error path
+
 BUG-002 Reproduced: Repeated retries append duplicate error messages because new <p> elements are added to the existing error container.
+
 Usability Observation: The application exposes the raw browser/API error name NotFoundError rather than presenting a user-oriented explanation that no available camera device could be found.
 
 
