@@ -195,3 +195,47 @@ Pass with Existing Defects Reproduced
 
 **Notes:**
 In the tested Chrome environment, repeated permission-prompt dismissals eventually resulted in NotAllowedError and the browser stopped presenting additional permission prompts. This behavior appears to be browser-controlled. Error message continues to state that microphone permissions were not granted, even though only camera access was requested. Repeatedly clicking "Open Camera" after the browser suppresses prompts continuously produces NotAllowedError blocks to the DOM via innerHTML +=.
+
+
+## TC-006 - Camera Unavailable at Initialization
+
+**Objective:**  
+Verify how the application handles camera initialization when no usable camera device is available.
+
+**Preconditions:**
+- WebRTC demo is accessible.
+- Browser camera permission is allowed or available to request.
+- The system camera can be temporarily disabled.
+
+**Test Steps:**
+
+1. Close or refresh the WebRTC demo so no camera stream is active.
+2. Temporarily disable the system camera.
+3. Return to the WebRTC `getUserMedia()` demo.
+4. Click **Open camera**.
+5. Allow camera permission if the browser prompts for it.
+6. Observe the video area.
+7. Observe any error messages displayed.
+8. Observe the state of the **Open camera** button.
+9. Re-enable the camera after testing.
+
+**Expected Result:**  
+No video stream initializes and the video area remains inactive. The application handles the unavailable-camera condition without crashing and displays an error indicating that no usable camera device is available. The Open Camera button remains available so the user can retry after restoring camera availability. Repeated retries should not unnecessarily duplicate previously displayed error content.
+
+**Actual Result:**  
+The video area remained inactive and no video stream was rendered. The application handled the failure through its generic error path and displayed getUserMedia error: NotFoundError. Refreshing the page and resetting browser permissions did not change the result while the system camera remained disabled. Repeatedly clicking Open Camera caused identical NotFoundError messages to accumulate vertically on the page.
+
+**Status:**  
+Pass with Existing Defect Reproduced + Usability Observation
+
+**Evidence:**
+[Add screenshot if applicable]
+
+**Notes:**  
+Exact Error: getUserMedia error: NotFoundError
+Execution Path: handleError() → fallback/generic error path
+BUG-002 Reproduced: Repeated retries append duplicate error messages because new <p> elements are added to the existing error container.
+Usability Observation: The application exposes the raw browser/API error name NotFoundError rather than presenting a user-oriented explanation that no available camera device could be found.
+
+
+
