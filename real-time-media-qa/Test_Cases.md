@@ -55,7 +55,7 @@ Pass
 
 
 **Evidence:**
- [Successful Camera Initialization](./evidence/TC-001_successful-camera-initialization.jpg)
+ [Successful Camera Initialization](Evidence/TC-001_successful-camera-initialization.jpg)
 
 
 **Notes:**
@@ -98,7 +98,7 @@ Fail
 
 
 **Evidence:**
-[Camera Permission Denied](evidence/TC-002_permission-denied-error.png)
+[Camera Permission Denied](Evidence/TC-002_permission-denied-error.png)
 
 
 **Notes:**  
@@ -143,7 +143,7 @@ Fail - Usability Defect Candidate TC-003_duplicate-errors-after-denial.png
 
 
 **Evidence:**
-[Duplicate Errors](evidence/TC-003_duplicate-errors-after-denial.png)
+[Duplicate Errors](Evidence/TC-003_duplicate-errors-after-denial.png)
 
 
 **Notes:**  
@@ -278,9 +278,9 @@ Fail
 
 
 **Evidence:**
-[Black stream after camera interruption](evidence/TC-006_black-stream-after-camera-disabled.png)
-[NotReadableError after page refresh](evidence/TC-006_notreadable-error-after-refresh.png)
-[Recovery failure with active camera indicators](evidence/TC-006_notreadable-error-with-active-camera-indicators.jpg)
+[Black stream after camera interruption](Evidence/TC-006_black-stream-after-camera-disabled.png)
+[NotReadableError after page refresh](Evidence/TC-006_notreadable-error-after-refresh.png)
+[Recovery failure with active camera indicators](Evidence/TC-006_notreadable-error-with-active-camera-indicators.jpg)
 
 
 **Notes:**  
@@ -333,7 +333,7 @@ Fail - OverconstrainedError branch handled successfully, but stale error state r
 
 
 **Evidence:**
-[Recovery failure with active camera indicators](evidence/TC-006_notreadable-error-with-active-camera-indicators.jpg)
+[Recovery failure with active camera indicators](Evidence/TC-006_notreadable-error-with-active-camera-indicators.jpg)
 
 
 **Notes:**  
