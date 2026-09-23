@@ -49,11 +49,49 @@ This project demonstrates hands-on experience with:
 
 ## Current Test Environment
 
-- Windows
-- Google Chrome 153.0.8010.52
+Testing was performed across:
 
-Additional browsers and devices will be added during cross-browser testing.
+- Windows - Google Chrome 153.0.8010.52
+- Windows - Microsoft Edge
+- Windows - Mozilla Firefox
+- iPhone - Safari
+
+Google Chrome was used as the primary deep-dive environment for source-informed testing, error-path analysis, resiliency testing, and runtime constraint manipulation.
+
+Edge, Firefox, and Safari were used for cross-browser compatibility validation of successful camera initialization and permission-denial behavior.
+
+## Project Results
+
+- 8 manual test cases executed
+- 4 documented defects
+- 4 of 4 manually identified primary execution paths exercised
+- Cross-browser validation across Chrome, Edge, Firefox, and Safari
+- Source-code review used to derive targeted test scenarios
+- Runtime media constraints modified to exercise the `OverconstrainedError` branch
+- Mid-stream camera interruption and recovery behavior evaluated
+- Real historical code change reviewed through change-impact analysis
+
+## Key Findings
+
+Testing identified issues involving:
+
+- Inaccurate permission-denial messaging
+- Duplicate error accumulation during repeated failures
+- Missing recovery handling after mid-stream camera interruption
+- Stale error messages remaining visible after successful recovery
+
+Cross-browser testing reproduced the permission-message and duplicate-error defects across all tested browsers.
+
+## Project Artifacts
+
+- [Test Plan](./Test_Plan.md)
+- [Test Cases](./Test_Cases.md)
+- [Defect Reports](./Defect_Reports.md)
+- [White-Box Test Analysis](./White_Box_Test_Analysis.md)
+- [Change Impact Analysis](./Change_Impact_Analysis.md)
+- [Cross-Browser Testing](./Cross_Browser_Testing.md)
+- [Test Evidence](./Evidence/)
 
 ## Project Status
 
-🚧 Testing in progress
+✅ Initial testing complete
